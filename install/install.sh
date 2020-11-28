@@ -14,8 +14,8 @@ then
 	unzip master.zip
 	rm master.zip
 
-	mkdir -p venus-liontron-Master/ext/velib_python
-	cp -R velib_python-master/* venus-liontron-Master/ext/velib_python
+	mkdir -p venus-liontronbms-Master/ext/velib_python
+	cp -R velib_python-master/* venus-liontronbms-Master/ext/velib_python
 
 	echo "Add Chargery entries to serial-starter"
 	echo 'ACTION=="add", ENV{ID_BUS}="usb", ENV{ID_MODEL}=="CP2102_USB_to_UART_Bridge_Controller",          ENV{VE_SERVICE}="liontronbms"' >> /etc/udev/rules.d/serial-starter.rules
