@@ -14,7 +14,7 @@ then
 	unzip master.zip
 	rm master.zip
 
-	mkdir -p venus-chargerybms-master/ext/velib_python
+	mkdir -p venus-liontron-master/ext/velib_python
 	cp -R velib_python-master/* venus-liontronbms-master/ext/velib_python
 
 	echo "Add Chargery entries to serial-starter"
@@ -39,7 +39,6 @@ then
 	cp venus-liontronbms-master/gui/qml/MbItemRowTOBO.qml /opt/victronenergy/gui/qml
 	cp venus-liontronbms-master/gui/qml/MbTextDescriptionTOBO.qml /opt/victronenergy/gui/qml
 	cp venus-liontronbms-master/gui/qml/PageBatteryChargeryBMS.qml /opt/victronenergy/gui/qml
-	cp venus-liontronbms-master/gui/qml/PageBatteryChargeryBMSImpedances.qml /opt/victronenergy/gui/qml
 	cp venus-liontronbms-master/gui/qml/PageBatteryChargeryBMSVoltages.qml /opt/victronenergy/gui/qml
 	cp venus-liontronbms-master/gui/qml/PageMain.qml /opt/victronenergy/gui/qml
 
