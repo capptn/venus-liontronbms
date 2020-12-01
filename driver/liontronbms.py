@@ -29,8 +29,8 @@ driver = {
 	'servicename' : "liontron",
 	'instance'    : 1,
 	'id'          : 0x01,
-	'version'     : 1.2,
-	'serial'      : "CHGBMS11062020A1",
+	'version'     : 1.0,
+	'serial'      : "LIONGBMS",
 	'connection'  : "com.victronenergy.battery.ttyLIONBMS01"
 }
 
@@ -43,11 +43,6 @@ parser.add_argument('--victron', action="store_true", help='enable Victron DBUS 
 requiredArguments = parser.add_argument_group('required arguments')
 requiredArguments.add_argument('-d', '--device', help='serial device for data (eg /dev/ttyUSB0)', required=True)
 args = parser.parse_args()
-
-if args.debug: # switch to debug level
-	logger = logging.getLogger()
-	logger.setLevel(logging.DEBUG)
-
 
 serial_port = serial.Serial(args.device, 115200, timeout=1)
 serial_port.flushInput()
@@ -102,30 +97,16 @@ if args.victron:
 	dbusservice.add_path('/Info/Mosfet',                   -1)
 	dbusservice.add_path('/Info/NumberOfCells',            -1)
 	dbusservice.add_path('/Info/Cycles',                   -1)
+	dbusservice.add_path('/Info/ProtectionState',          -1)
+	dbusservice.add_path('/Dc/0/Voltage',                  -1)
+	dbusservice.add_path('/Dc/0/Current',                  -1)
+	dbusservice.add_path('/Dc/0/Power',                    -1)
+	dbusservice.add_path('/Dc/0/Temperature',              -1)
+	dbusservice.add_path('/Soc',                           -1)
 	dbusservice.add_path('/Voltages/Cell1',                -1)
 	dbusservice.add_path('/Voltages/Cell2',                -1)
 	dbusservice.add_path('/Voltages/Cell3',                -1)
 	dbusservice.add_path('/Voltages/Cell4',                -1)
-	dbusservice.add_path('/Voltages/Cell5',                -1)
-	dbusservice.add_path('/Voltages/Cell6',                -1)
-	dbusservice.add_path('/Voltages/Cell7',                -1)
-	dbusservice.add_path('/Voltages/Cell8',                -1)
-	dbusservice.add_path('/Voltages/Cell9',                -1)
-	dbusservice.add_path('/Voltages/Cell10',               -1)
-	dbusservice.add_path('/Voltages/Cell11',               -1)
-	dbusservice.add_path('/Voltages/Cell12',               -1)
-	dbusservice.add_path('/Voltages/Cell13',               -1)
-	dbusservice.add_path('/Voltages/Cell14',               -1)
-	dbusservice.add_path('/Voltages/Cell15',               -1)
-	dbusservice.add_path('/Voltages/Cell16',               -1)
-	dbusservice.add_path('/Voltages/Cell17',               -1)
-	dbusservice.add_path('/Voltages/Cell18',               -1)
-	dbusservice.add_path('/Voltages/Cell19',               -1)
-	dbusservice.add_path('/Voltages/Cell20',               -1)
-	dbusservice.add_path('/Voltages/Cell21',               -1)
-	dbusservice.add_path('/Voltages/Cell22',               -1)
-	dbusservice.add_path('/Voltages/Cell23',               -1)
-	dbusservice.add_path('/Voltages/Cell24',               -1)
 	dbusservice.add_path('/Voltages/Sum',                  -1)
 	dbusservice.add_path('/Voltages/Diff',                 -1)
 	dbusservice.add_path('/Voltages/Max',                  -1)
@@ -134,37 +115,7 @@ if args.victron:
 	dbusservice.add_path('/Voltages/BatteryCapacityAH',    -1)
 	dbusservice.add_path('/Voltages/BatteryNominalAH',     -1)
 	dbusservice.add_path('/Voltages/UpdateTimestamp',      -1)
-	dbusservice.add_path('/Impedances/CurrentMode1',       -1)
-	dbusservice.add_path('/Impedances/Current1',           -1)
-	dbusservice.add_path('/Impedances/Cell1',              -1)
-	dbusservice.add_path('/Impedances/Cell2',              -1)
-	dbusservice.add_path('/Impedances/Cell3',              -1)
-	dbusservice.add_path('/Impedances/Cell4',              -1)
-	dbusservice.add_path('/Impedances/Cell5',              -1)
-	dbusservice.add_path('/Impedances/Cell6',              -1)
-	dbusservice.add_path('/Impedances/Cell7',              -1)
-	dbusservice.add_path('/Impedances/Cell8',              -1)
-	dbusservice.add_path('/Impedances/Cell9',              -1)
-	dbusservice.add_path('/Impedances/Cell10',             -1)
-	dbusservice.add_path('/Impedances/Cell11',             -1)
-	dbusservice.add_path('/Impedances/Cell12',             -1)
-	dbusservice.add_path('/Impedances/Cell13',             -1)
-	dbusservice.add_path('/Impedances/Cell14',             -1)
-	dbusservice.add_path('/Impedances/Cell15',             -1)
-	dbusservice.add_path('/Impedances/Cell16',             -1)
-	dbusservice.add_path('/Impedances/Cell17',             -1)
-	dbusservice.add_path('/Impedances/Cell18',             -1)
-	dbusservice.add_path('/Impedances/Cell19',             -1)
-	dbusservice.add_path('/Impedances/Cell20',             -1)
-	dbusservice.add_path('/Impedances/Cell21',             -1)
-	dbusservice.add_path('/Impedances/Cell22',             -1)
-	dbusservice.add_path('/Impedances/Cell23',             -1)
-	dbusservice.add_path('/Impedances/Cell24',             -1)
-	dbusservice.add_path('/Impedances/Sum',                -1)
-	dbusservice.add_path('/Impedances/Diff',               -1)
-	dbusservice.add_path('/Impedances/Max',                -1)
-	dbusservice.add_path('/Impedances/Min',                -1)
-	dbusservice.add_path('/Impedances/UpdateTimestamp',    -1)
+
 
 
 	# Create the real values paths
@@ -179,26 +130,6 @@ if args.victron:
 	dbusservice.add_path('/Raw/Voltages/Cell2',                -1)
 	dbusservice.add_path('/Raw/Voltages/Cell3',                -1)
 	dbusservice.add_path('/Raw/Voltages/Cell4',                -1)
-	dbusservice.add_path('/Raw/Voltages/Cell5',                -1)
-	dbusservice.add_path('/Raw/Voltages/Cell6',                -1)
-	dbusservice.add_path('/Raw/Voltages/Cell7',                -1)
-	dbusservice.add_path('/Raw/Voltages/Cell8',                -1)
-	dbusservice.add_path('/Raw/Voltages/Cell9',                -1)
-	dbusservice.add_path('/Raw/Voltages/Cell10',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell11',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell12',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell13',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell14',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell15',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell16',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell17',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell18',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell19',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell20',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell21',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell22',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell23',               -1)
-	dbusservice.add_path('/Raw/Voltages/Cell24',               -1)
 	dbusservice.add_path('/Raw/Voltages/Sum',                  -1)
 	dbusservice.add_path('/Raw/Voltages/Diff',                 -1)
 	dbusservice.add_path('/Raw/Voltages/Max',                  -1)
@@ -207,59 +138,10 @@ if args.victron:
 	dbusservice.add_path('/Raw/Voltages/BatteryCapacityAH',    -1)
 	dbusservice.add_path('/Raw/Voltages/BatteryNominalAH',     -1)
 	dbusservice.add_path('/Raw/Voltages/UpdateTimestamp',      -1)
-	dbusservice.add_path('/Raw/Impedances/CurrentMode1',       -1)
-	dbusservice.add_path('/Raw/Impedances/Current1',           -1)
-	dbusservice.add_path('/Raw/Impedances/Cell1',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell2',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell3',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell4',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell5',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell6',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell7',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell8',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell9',              -1)
-	dbusservice.add_path('/Raw/Impedances/Cell10',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell11',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell12',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell13',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell14',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell15',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell16',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell17',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell18',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell19',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell20',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell21',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell22',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell23',             -1)
-	dbusservice.add_path('/Raw/Impedances/Cell24',             -1)
-	dbusservice.add_path('/Raw/Impedances/Sum',                -1)
-	dbusservice.add_path('/Raw/Impedances/Diff',               -1)
-	dbusservice.add_path('/Raw/Impedances/Max',                -1)
-	dbusservice.add_path('/Raw/Impedances/Min',                -1)
-	dbusservice.add_path('/Raw/Impedances/UpdateTimestamp',    -1)
 
 
-PACKET_HEADER             = 0x24
-PACKET_STATUS_CELLS       = 0x56
-PACKET_STATUS_BMS         = 0x57
-PACKET_STATUS_IMPEDANCES  = 0x58
 
 PACKET_LENGTH_MINIMUM            = 10
-PACKET_LENGTH_STATUS_CELLS       = [29, 45, 61]
-PACKET_LENGTH_STATUS_BMS         = [15]
-
-# Special handling here: the impedances packet length is dynamically
-# and depends on how many cells are monitored. The minimum length of
-# the network packet with headers, command, length, currentmode1, current1
-# and checksum is 8 bytes. On 6 monitored cells the packet length will
-# be 8+(2*6) = 20 bytes. Therefore, the smallest possible and valid
-# impedances network packet will be 10 bytes
-PACKET_LENGTH_STATUS_IMPEDANCES  = 10
-
-
-MIN_CELL_VOLTAGE   = 1.0
-MIN_CELL_IMPEDANCE = 0.0
 
 BMS_STATUS = {
 	'bms' : {
@@ -312,6 +194,10 @@ BMS_STATUS = {
 		'cycles' : {
                         'value' : -1,
                         'text'  : ""
+                },
+		'protection_state' : {
+                        'value' : -1,
+                        'text'  : ""
                 }
 	},
 	'voltages' : {
@@ -328,86 +214,6 @@ BMS_STATUS = {
 			'text'  : ""
 		},
 		'cell4_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell5_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell6_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell7_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell8_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell9_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell10_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell11_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell12_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell13_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell14_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell15_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell16_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell17_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell18_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell19_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell20_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell21_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell22_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell23_voltage' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell24_voltage' : {
 			'value' : -1,
 			'text'  : ""
 		},
@@ -441,142 +247,6 @@ BMS_STATUS = {
                         'value' : -1,
                         'text'  : ""
                 },
-		'timestamp' : {
-			'value' : -1,
-			'text'  : ""
-		}
-	},
-	'impedances' : {
-		'current_mode1'    : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'current1'        : {
-			'value' : -1,
-			'text' : ""
-		},
-		'cell1_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell2_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell3_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell4_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell5_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell6_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell7_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell8_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell9_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell10_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell11_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell12_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell13_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell14_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell15_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell16_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell17_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell18_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell19_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell20_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell21_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell22_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell23_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'cell24_impedance' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'agg_impedances' : {
-			'sum' : {
-				'value' : -1,
-				'text'  : ""
-			},
-			'max' : {
-				'value' : -1,
-				'text'  : ""
-			},
-			'min' : {
-				'value' : -1,
-				'text'  : ""
-			},
-			'diff' : {
-				'value' : -1,
-				'text'  : ""
-			}
-		},
-		'battery_capacity_wh' : {
-			'value' : -1,
-			'text'  : ""
-		},
-		'battery_capacity_ah' : {
-			'value' : -1,
-			'text'  : ""
-		},
 		'timestamp' : {
 			'value' : -1,
 			'text'  : ""
@@ -628,75 +298,6 @@ def reset_status_values():
         BMS_STATUS['bms']['number_of_cells']['value'] = -1
         BMS_STATUS['bms']['number_of_cells']['text']  = ""
 
-def reset_impedances_values():
-
-	BMS_STATUS['impedances']['current_mode1']['value'] = -1
-	BMS_STATUS['impedances']['current_mode1']['text']  = ""
-	BMS_STATUS['impedances']['current1']['value'] = -1
-	BMS_STATUS['impedances']['current1']['text']  = ""
-	BMS_STATUS['impedances']['cell1_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell1_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell2_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell2_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell3_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell3_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell4_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell4_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell5_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell5_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell6_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell6_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell7_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell7_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell8_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell8_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell9_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell9_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell10_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell10_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell11_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell11_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell12_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell12_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell13_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell13_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell14_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell14_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell15_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell15_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell16_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell16_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell17_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell17_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell18_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell18_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell19_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell19_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell20_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell20_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell21_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell21_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell22_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell22_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell23_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell23_impedance']['text']  = ""
-	BMS_STATUS['impedances']['cell24_impedance']['value'] = -1
-	BMS_STATUS['impedances']['cell24_impedance']['text']  = ""
-	BMS_STATUS['impedances']['agg_impedances']['sum']['value'] = -1
-	BMS_STATUS['impedances']['agg_impedances']['sum']['text']  = ""
-	BMS_STATUS['impedances']['agg_impedances']['max']['value'] = -1
-	BMS_STATUS['impedances']['agg_impedances']['max']['text']  = ""
-	BMS_STATUS['impedances']['agg_impedances']['min']['value'] = -1
-	BMS_STATUS['impedances']['agg_impedances']['min']['text']  = ""
-	BMS_STATUS['impedances']['agg_impedances']['diff']['value'] = -1
-	BMS_STATUS['impedances']['agg_impedances']['diff']['text']  = ""
-	BMS_STATUS['impedances']['battery_capacity_wh']['value'] = -1
-	BMS_STATUS['impedances']['battery_capacity_wh']['text']  = ""
-	BMS_STATUS['impedances']['battery_capacity_ah']['value'] = -1
-	BMS_STATUS['impedances']['battery_capacity_ah']['text']  = ""
-	BMS_STATUS['impedances']['timestamp']['value'] = -1
-	BMS_STATUS['impedances']['timestamp']['text']  = ""
-
 
 def reset_voltages_values():
 	BMS_STATUS['voltages']['cell1_voltage']['value'] = -1
@@ -707,46 +308,6 @@ def reset_voltages_values():
 	BMS_STATUS['voltages']['cell3_voltage']['text']  = ""
 	BMS_STATUS['voltages']['cell4_voltage']['value'] = -1
 	BMS_STATUS['voltages']['cell4_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell5_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell5_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell6_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell6_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell7_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell7_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell8_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell8_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell9_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell9_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell10_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell10_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell11_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell11_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell12_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell12_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell13_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell13_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell14_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell14_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell15_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell15_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell16_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell16_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell17_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell17_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell18_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell18_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell19_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell19_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell20_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell20_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell21_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell21_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell22_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell22_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell23_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell23_voltage']['text']  = ""
-	BMS_STATUS['voltages']['cell24_voltage']['value'] = -1
-	BMS_STATUS['voltages']['cell24_voltage']['text']  = ""
 	BMS_STATUS['voltages']['agg_voltages']['sum']['value'] = -1
 	BMS_STATUS['voltages']['agg_voltages']['sum']['text']  = ""
 	BMS_STATUS['voltages']['agg_voltages']['max']['value'] = -1
@@ -762,52 +323,8 @@ def reset_voltages_values():
 	BMS_STATUS['voltages']['timestamp']['value'] = -1
 	BMS_STATUS['voltages']['timestamp']['text']  = ""
 
-
-def debug_packet(packet):
-
-	string_output = ""
-	for packet_byte in packet:
-		byte_string = str(ord(packet_byte)) + " [" + packet_byte.encode("hex") + "] "
-	 	string_output = string_output + byte_string
-	logging.debug(string_output);
-
-
-def get_header_position(packet):
-
-	# detect header position
-	previous_packet_byte = "0"
-	pos_iterator = -1
-	for packet_byte in packet:
-		pos_iterator += 1
-		if ((ord(previous_packet_byte) == PACKET_HEADER) and (ord(packet_byte) == PACKET_HEADER)):
-			break
-		previous_packet_byte = packet_byte
-
-	return pos_iterator
-
-
 def get_voltage_value(val1):
 	return float(val1.strip())
-
-
-def get_current_value(byte1, byte2):
-	return float((float(byte1 * 256) + float(byte2)) / 10)
-
-
-def get_current1_value(byte1, byte2):
-	return float((float(byte1) + float(byte2 * 256)) / 10)
-
-
-def get_temperature_value(byte1, byte2):
-	return float((float(byte1 * 256) + float(byte2)) / 10)
-
-
-def get_battery_capacity(byte1, byte2, byte3, byte4):
-	return float((float(byte1) + float(byte2 * 256) + float(byte3 * 256 * 256) + float(byte4 * 256 * 256 * 256)) / 1000)
-
-
-def get_cell_impedance(byte1, byte2):
-	return float((float(byte1) + float(byte2 * 256)) / 10)
 
 def get_remainWh(v, ah):
         return int(v * ah)
@@ -819,7 +336,7 @@ def parse_packet(packet):
 	print(packet)
 	lines = packet.splitlines()
 	if len(lines) >= 18:
-		cell1_voltage = lines[12].split(": ")
+		cell1_voltage = lines[13].split(": ")
 		print("NEW DATA")
 		if len(cell1_voltage) >= 2:
 			if cell1_voltage[0] == "Cell 1":
@@ -836,21 +353,21 @@ def parse_packet(packet):
 				if args.victron:
 					dbusservice["/Voltages/UpdateTimestamp"] = BMS_STATUS['voltages']['timestamp']['text']
 					dbusservice["/Raw/Voltages/UpdateTimestamp"] = BMS_STATUS['voltages']['timestamp']['value']
-			cell2_voltage = lines[13].split(": ")
+			cell2_voltage = lines[14].split(": ")
 			if cell2_voltage[0] == "Cell 2":
 				BMS_STATUS['voltages']['cell2_voltage']['value'] = get_voltage_value(cell2_voltage[1])
                                 BMS_STATUS['voltages']['cell2_voltage']['text'] = "{:.3f}".format(float(cell2_voltage[1])) + "V"
                                 if args.victron:
                                         dbusservice["/Voltages/Cell2"] = BMS_STATUS['voltages']['cell2_voltage']['text']
                                         dbusservice["/Raw/Voltages/Cell2"] = BMS_STATUS['voltages']['cell2_voltage']['value']
-			cell3_voltage = lines[14].split(": ")
+			cell3_voltage = lines[15].split(": ")
                         if cell3_voltage[0] == "Cell 3":
                                 BMS_STATUS['voltages']['cell3_voltage']['value'] = get_voltage_value(cell3_voltage[1])
                                 BMS_STATUS['voltages']['cell3_voltage']['text'] = "{:.3f}".format(float(cell3_voltage[1])) + "V"
                                 if args.victron:
                                         dbusservice["/Voltages/Cell3"] = BMS_STATUS['voltages']['cell3_voltage']['text']
                                         dbusservice["/Raw/Voltages/Cell3"] = BMS_STATUS['voltages']['cell3_voltage']['value']
-			cell4_voltage = lines[15].split(": ")
+			cell4_voltage = lines[16].split(": ")
                         if cell4_voltage[0] == "Cell 4":
                                 BMS_STATUS['voltages']['cell4_voltage']['value'] = get_voltage_value(cell4_voltage[1])
                                 BMS_STATUS['voltages']['cell4_voltage']['text'] = "{:.3f}".format(float(cell4_voltage[1])) + "V"
@@ -864,6 +381,7 @@ def parse_packet(packet):
 				if args.victron:
 					dbusservice["/Voltages/Sum"]      = BMS_STATUS['voltages']['agg_voltages']['sum']['text']
 					dbusservice["/Raw/Voltages/Sum"]  = BMS_STATUS['voltages']['agg_voltages']['sum']['value']
+					dbusservice["/Dc/0/Voltage"]  = BMS_STATUS['voltages']['agg_voltages']['sum']['value']
 			soc = lines[5].split(": ")
 			if len(soc) >= 2 and soc[0] == "CapacityRemainPercent":
 				# soc value
@@ -874,7 +392,7 @@ def parse_packet(packet):
 				if args.victron:
 					dbusservice["/Info/Soc"] = BMS_STATUS['bms']['soc']['text']
 					dbusservice["/Raw/Info/Soc"] = BMS_STATUS['bms']['soc']['value']
-
+					dbusservice["/Soc"] = BMS_STATUS['bms']['soc']['value']
 				# update timestamp
 				current_date = datetime.datetime.now()
 				BMS_STATUS['bms']['timestamp']['value'] = time.time()
@@ -889,6 +407,7 @@ def parse_packet(packet):
 				if args.victron:
 					dbusservice["/Info/Temp/Sensor1"] = BMS_STATUS['bms']['temperature']['sensor_t1']['text']
 					dbusservice["/Raw/Info/Temp/Sensor1"] = BMS_STATUS['bms']['temperature']['sensor_t1']['value']
+					dbusservice["/Dc/0/Temperature"] = BMS_STATUS['bms']['temperature']['sensor_t1']['value']
 			temp2 = lines[7].split(": ")
                         if len(temp2) >= 2 and temp2[0] == "Temp2":
                                 BMS_STATUS['bms']['temperature']['sensor_t2']['value'] = float(temp2[1])
@@ -926,6 +445,10 @@ def parse_packet(packet):
 				if args.victron:
 					dbusservice["/Info/Current"]     = BMS_STATUS['bms']['current']['text']
 					dbusservice["/Raw/Info/Current"]     = BMS_STATUS['bms']['current']['value']
+					dbusservice["/Dc/0/Current"]     = BMS_STATUS['bms']['current']['value']
+				watt = BMS_STATUS['bms']['current']['value'] * BMS_STATUS['voltages']['agg_voltages']['sum']['value']
+				if args.victron:
+					dbusservice["/Dc/0/Power"]     = watt
 			balanceLow = lines[8].split(": ")
                         if len(balanceLow) >= 2 and balanceLow[0] == "Balance Code Low":
                                 BMS_STATUS['bms']['balance_low']['text'] = balanceLow[1]
@@ -941,65 +464,60 @@ def parse_packet(packet):
                                 BMS_STATUS['bms']['mosfet']['text'] = mosfet[1]
                                 if args.victron:
                                         dbusservice["/Info/Mosfet"]     = BMS_STATUS['bms']['mosfet']['text']
-			numberOfCells = lines[11].split(": ")
+			numberOfCells = lines[12].split(": ")
                         if len(numberOfCells) >= 2 and numberOfCells[0] == "Number of cells":
                                 BMS_STATUS['bms']['number_of_cells']['text'] = numberOfCells[1]
                                 if args.victron:
                                         dbusservice["/Info/NumberOfCells"]     = BMS_STATUS['bms']['number_of_cells']['text']
 			cycles = lines[4].split(": ")
                         if len(cycles) >= 2 and cycles[0] == "Cycles":
-                                BMS_STATUS['bms']['cycles']['text'] = cycles[1]
+                                BMS_STATUS['bms']['cycles']['text'] = int(float(cycles[1]))
                                 if args.victron:
                                         dbusservice["/Info/Cycles"]     = BMS_STATUS['bms']['cycles']['text']
+			protectioncode = lines[11].split(": ")
+                        if len(protectioncode) >= 2 and protectioncode[0] == "Protection Code":
+				protectionbyte = int(protectioncode[1], 16)
+				print(protectionbyte);
+				protectiontext = "---"
+				if protectionbyte == 0:
+					protectiontext = "Kein Fehler"
+				if protectionbyte != 0:
+					protectiontext = "Fehler vorhanden!"
+				print(protectiontext);
+                                BMS_STATUS['bms']['protection_state']['text'] = protectiontext
+                                if args.victron:
+                                        dbusservice["/Info/ProtectionState"]     = BMS_STATUS['bms']['protection_state']['text']
+
 
 def handle_serial_data(test_packet = ''):
 	try:
+		serial_packet = ""
+		if (serial_port.in_waiting > 0):
+			logging.debug("Data Waiting [" + str(serial_port.in_waiting) + " bytes]")
+		if (serial_port.in_waiting >= (PACKET_LENGTH_MINIMUM * 2)):
+			data_buffer_array = serial_port.read(serial_port.in_waiting)
+			logging.debug("Data Received [" + str(len(data_buffer_array)) + " bytes]")
+			for data_buffer in data_buffer_array:
+				serial_packet += data_buffer
 
-		if (len(test_packet) > 0): # for testing the example packets form the chargery manual
-			parse_packet(test_packet)
-		else:
+			if (len(serial_packet) > 0):
+				parse_packet(serial_packet)
+
+			data_buffer_array = ""
 			serial_packet = ""
-			if (serial_port.in_waiting > 0):
-				logging.debug("Data Waiting [" + str(serial_port.in_waiting) + " bytes]")
-			if (serial_port.in_waiting >= (PACKET_LENGTH_MINIMUM * 2)):
-				data_buffer_array = serial_port.read(serial_port.in_waiting)
-				logging.debug("Data Received [" + str(len(data_buffer_array)) + " bytes]")
-				for data_buffer in data_buffer_array:
-					serial_packet += data_buffer
-
-				if (len(serial_packet) > 0):
-					parse_packet(serial_packet)
-
-				data_buffer_array = ""
-				serial_packet = ""
 
 		if args.victron:
-			# recheck every second
 			gobject.timeout_add(1000, handle_serial_data)
 
 	except KeyboardInterrupt:
 		if not args.victron:
 			raise
 
-
-if args.test:
-	for item in BMS_TEST_PACKETS.items():
-		handle_serial_data(str(item[1]));
-
-	# if we registered in testing to dbus, wait until the script is exitted with keyboard interruption
-	if args.victron:
-		logging.info("Waiting for keyboard interruption...")
-		while True:
-			time.sleep(1)
-
-
-
+if args.victron:
+	gobject.timeout_add(1000, handle_serial_data)
+	mainloop = gobject.MainLoop()
+	mainloop.run()
 else:
-	if args.victron:
-		gobject.timeout_add(1000, handle_serial_data)
-		mainloop = gobject.MainLoop()
-		mainloop.run()
-	else:
-		while True:
-			handle_serial_data()
-			time.sleep(1)
+	while True:
+		handle_serial_data()
+		time.sleep(1)
