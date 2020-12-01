@@ -16,7 +16,7 @@ This driver connects Venus OS to a Liontron BMS (xiaoxiang bms).
 <img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example3.png" height="200">
 
 
-The Liontronbms Driver can act as the Main Batterymonitor of your Victron Venus OS System.
+The Liontronbms driver can act as the main batterymonitor of your victron system.
 
 <img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example4.png" height="200">
 <img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example5.png" height="200">
