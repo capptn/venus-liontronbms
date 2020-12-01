@@ -27,9 +27,9 @@ The Liontronbms driver can act as the main batterymonitor of your victron system
 - ESP32 as bridge beetwen USB->Serial->Bluetooth with this software: [coming soon]
 
 # Installation on Venus OS
+- Access Venus os via SSH with root: [https://www.victronenergy.com/live/ccgx:root_access]
 - Download the install.sh under /install/install.sh
 - run it with `sh install.sh`
-- Access Venus os via SSH with root: [https://www.victronenergy.com/live/ccgx:root_access]
 - connect the ESP32
 - reboot
 
