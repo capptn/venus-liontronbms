@@ -11,9 +11,9 @@ Many Thanks!
 
 This driver connects Venus OS to a Liontron BMS (xiaoxiang bms). 
 
-![preview1](https://github.com/capptn/venus-liontronbms/blob/main/img/example1.png)
-![preview2](https://github.com/capptn/venus-liontronbms/blob/main/img/example2.png)
-![preview3](https://github.com/capptn/venus-liontronbms/blob/main/img/example3.png)
+![preview1](https://github.com/capptn/venus-liontronbms/blob/Master/img/example1.png)
+![preview2](https://github.com/capptn/venus-liontronbms/blob/Master/img/example2.png)
+![preview3](https://github.com/capptn/venus-liontronbms/blob/Master/img/example3.png)
 
 # Requirements
 
