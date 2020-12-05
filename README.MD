@@ -32,8 +32,8 @@ The Liontronbms driver can act as the main batterymonitor of your victron system
 - Access Venus os via SSH with root: [https://www.victronenergy.com/live/ccgx:root_access]
 - Download the install.sh under /install/install.sh
 - run it with `sh install.sh`
-- connect the ESP32
 - reboot
+- connect the Battery and FTDI
 
 # Notes
 - The driver must be reinstalled after a firmware upgrade
