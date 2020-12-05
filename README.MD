@@ -23,6 +23,8 @@ The Liontronbms driver can act as the main batterymonitor of your victron system
 
 !! Attention !!, you have to open and change the battery. All changes you make are at your own risk
 
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example6.png" height="200">
+
 # Requirements
 
 - Venus OS, GX Device or Raspberry Pi
