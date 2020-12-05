@@ -21,10 +21,12 @@ The Liontronbms driver can act as the main batterymonitor of your victron system
 <img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example4.png" height="200">
 <img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example5.png" height="200">
 
+!! Attention !!, you have to open and change the battery. All changes you make are at your own risk
+
 # Requirements
 
 - Venus OS, GX Device or Raspberry Pi
-- ESP32 as bridge beetwen USB->Serial->Bluetooth with this software: [coming soon]
+- FTDI-USB Adapter
 
 # Installation on Venus OS
 - Access Venus os via SSH with root: [https://www.victronenergy.com/live/ccgx:root_access]
