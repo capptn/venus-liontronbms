@@ -11,9 +11,15 @@ Many Thanks!
 
 This driver connects Venus OS to a Liontron BMS (xiaoxiang bms). 
 
-![preview1](https://github.com/capptn/venus-liontronbms/blob/main/img/example1.png)
-![preview2](https://github.com/capptn/venus-liontronbms/blob/main/img/example2.png)
-![preview3](https://github.com/capptn/venus-liontronbms/blob/main/img/example3.png)
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example1.png" height="200">
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example2.png" height="200">
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example3.png" height="200">
+
+
+The Liontronbms driver can act as the main batterymonitor of your victron system.
+
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example4.png" height="200">
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example5.png" height="200">
 
 # Requirements
 
@@ -21,8 +27,9 @@ This driver connects Venus OS to a Liontron BMS (xiaoxiang bms).
 - ESP32 as bridge beetwen USB->Serial->Bluetooth with this software: [coming soon]
 
 # Installation on Venus OS
-- Download the install.sh under /install/install.sh
 - Access Venus os via SSH with root: [https://www.victronenergy.com/live/ccgx:root_access]
+- Download the install.sh under /install/install.sh
+- run it with `sh install.sh`
 - connect the ESP32
 - reboot
 
