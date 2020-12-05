@@ -36,19 +36,9 @@ then
 
 	echo "Copy gui files"
 
-	cp venus-liontronbms-Master/gui/qml/MbItemRowTOBO.qml /opt/victronenergy/gui/qml
-	cp venus-liontronbms-Master/gui/qml/MbTextDescriptionTOBO.qml /opt/victronenergy/gui/qml
-	cp venus-liontronbms-Master/gui/qml/PageBatteryChargeryBMS.qml /opt/victronenergy/gui/qml
-	cp venus-liontronbms-Master/gui/qml/PageBatteryChargeryBMSVoltages.qml /opt/victronenergy/gui/qml
+	cp venus-liontronbms-Master/gui/qml/PageBatteryLiontronBms.qml /opt/victronenergy/gui/qml
+	cp venus-liontronbms-Master/gui/qml/PageBatteryChargeryLiontronBmsInfo.qml /opt/victronenergy/gui/qml
 	cp venus-liontronbms-Master/gui/qml/PageMain.qml /opt/victronenergy/gui/qml
-
-	read -p "Setup new gui overview? [Y to proceed]" -n 1 -r
-	echo    # (optional) move to a new line
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-		echo "Setup new overview"
-		cp venus-liontronbms-Master/gui/qml/OverviewTiles.qml /opt/victronenergy/gui/qml
-	fi
 
 	echo "To finish, reboot the Venus OS device"
 fi

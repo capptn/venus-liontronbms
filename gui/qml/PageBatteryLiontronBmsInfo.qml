@@ -12,11 +12,12 @@ MbPage {
 	model: VisualItemModel {
 
 		MbItemRow {
-			description: qsTr("Status (BalL/BalH/Mos)")
+			description: qsTr("Zellen Balancer")
 			values: [
-				MbTextBlock { item { bind: service.path("/Info/BalanceLow"); } width: 70; height: 25 },
-				MbTextBlock { item { bind: service.path("/Info/BalanceHigh"); } width: 70; height: 25 },
-				MbTextBlock { item { bind: service.path("/Info/Mosfet"); } width: 70; height: 25 }
+				MbTextBlock { item { bind: service.path("/Info/Balance1"); } width: 40; height: 25 },
+				MbTextBlock { item { bind: service.path("/Info/Balance2"); } width: 40; height: 25 },
+				MbTextBlock { item { bind: service.path("/Info/Balance3"); } width: 40; height: 25 },
+				MbTextBlock { item { bind: service.path("/Info/Balance4"); } width: 40; height: 25 }
 			]
 		}
 
@@ -24,6 +25,13 @@ MbPage {
                         description: qsTr("Zellenanzahl")
                         values: [
                                 MbTextBlock { item { bind: service.path("/Info/NumberOfCells"); } width: 70; height: 25 }
+                        ]
+                }
+
+		MbItemRow {
+                        description: qsTr("Ladezyklen")
+                        values: [
+                                MbTextBlock { item { bind: service.path("/Info/Cycles"); } width: 70; height: 25 }
                         ]
                 }
 
@@ -49,6 +57,13 @@ MbPage {
 				MbTextBlock { item { bind: service.path("/Voltages/BatteryNominalAH"); } width: 70; height: 25 }
 			]
 		}
+
+		MbItemRow {
+                        description: qsTr("Fehler Meldung")
+                        values: [
+                                MbTextBlock { item { bind: service.path("/Info/ProtectionState"); } width: 215; height: 25 }
+                        ]
+                }
 
 		MbItemRow {
 			description: qsTr("Data Timestamp")

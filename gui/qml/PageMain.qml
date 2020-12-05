@@ -41,8 +41,8 @@ MbPage {
 	}
 
 	Component {
-		id: batteryPageChargeryBMS
-		PageBatteryChargeryBMS {}
+		id: batteryPageLiontronBms
+		PageBatteryLiontronBms {}
 	}
 
 	Component {
@@ -112,7 +112,7 @@ MbPage {
 			break;
 		case DBusService.DBUS_SERVICE_BATTERY:
 			if (service.name == "com.victronenergy.battery.ttyLIONBMS01") {
-				page = batteryPageChargeryBMS
+				page = batteryPageLiontronBms
 			} else {
 				page = batteryPage
 			}

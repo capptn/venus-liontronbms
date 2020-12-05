@@ -36,7 +36,7 @@ MbPage {
 		}
 
 		MbItemRow {
-			description: qsTr("Temperature Sensors (1/2)")
+			description: qsTr("Temperatur-Sensoren (1/2)")
 			values: [
 				MbTextBlock { item { bind: service.path("/Info/Temp/Sensor1"); } width: 70; height: 25 },
 				MbTextBlock { item { bind: service.path("/Info/Temp/Sensor2"); } width: 70; height: 25 }
@@ -45,7 +45,7 @@ MbPage {
 
 
 		MbItemRow {
-			description: qsTr("Letzte Daten von")
+			description: qsTr("Letzte Verbindung")
 			values: [
 				MbTextBlock { item { bind: service.path("/Info/UpdateTimestamp"); } width: 215; height: 25 }
 			]
@@ -53,9 +53,9 @@ MbPage {
 
 
 		MbSubMenu {
-			description: qsTr("Zell Spannungen")
+			description: qsTr("Informationen")
 			subpage: Component {
-				PageBatteryChargeryBMSVoltages {
+				PageBatteryLiontronBmsInfo {
 					bindPrefix: service.path("")
 				}
 			}
