@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -p "Install Chargery BMS on Venus OS at your own risk? [Y to proceed]" -n 1 -r
+read -p "Install Liontron BMS on Venus OS at your own risk? [Y to proceed]" -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -17,11 +17,11 @@ then
 	mkdir -p venus-liontronbms-Master/ext/velib_python
 	cp -R velib_python-master/* venus-liontronbms-Master/ext/velib_python
 
-	echo "Add Chargery entries to serial-starter"
+	echo "Add CLiontron entries to serial-starter"
 	echo 'ACTION=="add", ENV{ID_BUS}="usb", ENV{ID_MODEL}=="CP2102_USB_to_UART_Bridge_Controller",          ENV{VE_SERVICE}="liontronbms"' >> /etc/udev/rules.d/serial-starter.rules
 	sed -i  '/service.*imt.*dbus-imt-si-rs485tc/a service liontronbms     liontronbms' /etc/venus/serial-starter.conf
 
-	echo "Install Chargery driver"
+	echo "Install Liontron driver"
 	mkdir -p /var/log/liontronbms
 	mkdir -p /opt/victronenergy/liontronbms
 	cp -R venus-liontronbms-Master/ext /opt/victronenergy/liontronbms
@@ -37,7 +37,7 @@ then
 	echo "Copy gui files"
 
 	cp venus-liontronbms-Master/gui/qml/PageBatteryLiontronBms.qml /opt/victronenergy/gui/qml
-	cp venus-liontronbms-Master/gui/qml/PageBatteryChargeryLiontronBmsInfo.qml /opt/victronenergy/gui/qml
+	cp venus-liontronbms-Master/gui/qml/PageBatteryLiontronBmsInfo.qml /opt/victronenergy/gui/qml
 	cp venus-liontronbms-Master/gui/qml/PageMain.qml /opt/victronenergy/gui/qml
 
 	echo "To finish, reboot the Venus OS device"
