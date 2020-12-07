@@ -30,7 +30,7 @@ driver = {
 	'instance'    : 1,
 	'id'          : 0x01,
 	'version'     : 1.0,
-	'serial'      : "LIONGBMS",
+	'serial'      : "LIONBMS",
 	'connection'  : "com.victronenergy.battery.ttyLIONBMS01"
 }
 
@@ -83,6 +83,14 @@ if args.victron:
 	dbusservice.add_path('/Devices/0/ProductName',     driver['name'])
 	dbusservice.add_path('/Devices/0/ServiceName',     driver['servicename'])
 	dbusservice.add_path('/Devices/0/VregLink',        "(API)")
+
+	dbusservice.add_path('/Alarms/LowVoltage',              0)
+	dbusservice.add_path('/Alarms/HighVoltage',             0)
+	dbusservice.add_path('/Alarms/LowSoc',                  0)
+	dbusservice.add_path('/Alarms/HighChargeCurrent',       0)
+	dbusservice.add_path('/Alarms/HighDischargeCurrent',    0)
+	dbusservice.add_path('/Alarms/HighChargeTemperature',   0)
+	dbusservice.add_path('/Alarms/LowChargeTemperature',    0)
 
 	# Create the chargery bms paths
 	dbusservice.add_path('/Info/Soc',                      -1)
@@ -476,6 +484,18 @@ def parse_packet(packet):
 			BMS_STATUS['bms']['protection_state']['text'] = protectionText
                         if args.victron:
                         	dbusservice["/Info/ProtectionState"]     = BMS_STATUS['bms']['protection_state']['text']
+		        
+			if args.victron:
+                                dbusservice["/Alarms/HighChargeTemperature"]     = protectionBits1[4]
+				dbusservice["/Alarms/LowChargeTemperature"]     = protectionBits1[5]
+				dbusservice["/Alarms/HighDischargeCurrent"]     = protectionBits2[1]
+				dbusservice["/Alarms/HighChargeCurrent"]     = protectionBits2[0]
+				dbusservice["/Alarms/HighVoltage"]     = protectionBits1[2]
+				dbusservice["/Alarms/LowVoltage"]     = protectionBits1[3]
+				if(soc <= 16):
+					dbusservice["/Alarms/LowSoc"]     = 1
+				else:
+					dbusservice["/Alarms/LowSoc"]     = 0
 			balanceByte = ord(packet[16])
                         balanceBits = bin(balanceByte)[2:].rjust(8, '0')
 			BMS_STATUS['bms']['balance_1']['text'] = balanceBits[0]
