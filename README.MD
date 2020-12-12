@@ -25,10 +25,13 @@ The Liontronbms driver can act as the main batterymonitor of your victron system
 
 <img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example6.png" height="300">
 
+!! Attention, the wiring shown in the picture is only for the test setup.
+If the system is an island system on battery operation, attention must be paid to the isolation of the FTDI adapter. Otherwise equalizing currents will flow which are not measured by the bms.
+
 # Requirements
 
 - Venus OS, GX Device or Raspberry Pi
-- FTDI-USB Adapter
+- FTDI-USB Adapter (with CP2102 Chip)
 
 # Installation on Venus OS
 - Access Venus os via SSH with root: [https://www.victronenergy.com/live/ccgx:root_access]
