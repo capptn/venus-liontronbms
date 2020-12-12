@@ -23,12 +23,12 @@ The Liontronbms driver can act as the main batterymonitor of your victron system
 
 !! Attention !!, you have to open and change the battery. All changes you make are at your own risk
 
-<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example6.png" height="300">
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/example6.png" height="500">
 
 !! Attention, the wiring shown in the picture is only for the test setup.
 If the system is an island system on battery operation, attention must be paid to the isolation of the FTDI adapter. Otherwise equalizing currents will flow which are not measured by the bms.
 
-<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/conn_example.png" height="300">
+<img src="https://github.com/capptn/venus-liontronbms/blob/Master/img/conn_example.png" height="500">
 
 # Requirements
 
