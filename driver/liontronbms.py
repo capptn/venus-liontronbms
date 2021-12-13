@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
-import gobject
+from gi.repository import GLib as gobject
 import platform
 import argparse
 import logging
@@ -29,7 +29,7 @@ driver = {
 	'servicename' : "liontron",
 	'instance'    : 1,
 	'id'          : 0x01,
-	'version'     : 1.0,
+	'version'     : 1.1,
 	'serial'      : "LIONBMS",
 	'connection'  : "com.victronenergy.battery.ttyLIONBMS01"
 }
@@ -295,17 +295,17 @@ def reset_status_values():
 	BMS_STATUS['bms']['timestamp']['value'] = -1
 	BMS_STATUS['bms']['timestamp']['text']  = ""
 	BMS_STATUS['bms']['balance_1']['value'] = -1
-        BMS_STATUS['bms']['balance_1']['text']  = ""
+	BMS_STATUS['bms']['balance_1']['text']  = ""
 	BMS_STATUS['bms']['balance_2']['value'] = -1
-        BMS_STATUS['bms']['balance_2']['text']  = ""
+	BMS_STATUS['bms']['balance_2']['text']  = ""
 	BMS_STATUS['bms']['balance_3']['value'] = -1
-        BMS_STATUS['bms']['balance_3']['text']  = ""
+	BMS_STATUS['bms']['balance_3']['text']  = ""
 	BMS_STATUS['bms']['balance_4']['value'] = -1
-        BMS_STATUS['bms']['balance_4']['text']  = ""
-        BMS_STATUS['bms']['mosfet']['value'] = -1
-        BMS_STATUS['bms']['mosfet']['text']  = ""
-        BMS_STATUS['bms']['number_of_cells']['value'] = -1
-        BMS_STATUS['bms']['number_of_cells']['text']  = ""
+	BMS_STATUS['bms']['balance_4']['text']  = ""
+	BMS_STATUS['bms']['mosfet']['value'] = -1
+	BMS_STATUS['bms']['mosfet']['text']  = ""
+	BMS_STATUS['bms']['number_of_cells']['value'] = -1
+	BMS_STATUS['bms']['number_of_cells']['text']  = ""
 
 
 def reset_voltages_values():
@@ -336,15 +336,15 @@ def get_voltage_value(val1):
 	return float(val1.strip())
 
 def get_remainWh(v, ah):
-        return int(v * ah)
+	return int(v * ah)
 
 
 def parse_packet(packet):
 	dataLength = len(packet)
 	print(dataLength)
-	if(ord(packet[0]) == 221):
-		if(ord(packet[1]) == 4):
-			cell1 = float(ord(packet[4])<<8 | ord(packet[5]))/1000.0
+	if(packet[0] == 221):
+		if(packet[1] == 4):
+			cell1 = float(packet[4]<<8 | packet[5])/1000.0
 			logging.info("parse packet 4")
 			logging.info(cell1)
 			BMS_STATUS['voltages']['cell1_voltage']['value'] = cell1
@@ -358,28 +358,28 @@ def parse_packet(packet):
 			if args.victron:
 				dbusservice["/Voltages/UpdateTimestamp"] = BMS_STATUS['voltages']['timestamp']['text']
 				dbusservice["/Raw/Voltages/UpdateTimestamp"] = BMS_STATUS['voltages']['timestamp']['value']
-			cell2 = float(ord(packet[6])<<8 | ord(packet[7]))/1000.0
+			cell2 = float(packet[6]<<8 | packet[7])/1000.0
 			BMS_STATUS['voltages']['cell2_voltage']['value'] = cell2
-        		BMS_STATUS['voltages']['cell2_voltage']['text'] = "{:.3f}".format(cell2) + "V"
-        		if args.victron:
-        			dbusservice["/Voltages/Cell2"] = BMS_STATUS['voltages']['cell2_voltage']['text']
-               			dbusservice["/Raw/Voltages/Cell2"] = BMS_STATUS['voltages']['cell2_voltage']['value']
-                        cell3 = float(ord(packet[8])<<8 | ord(packet[9]))/1000.0
-                        BMS_STATUS['voltages']['cell3_voltage']['value'] = cell3
-                        BMS_STATUS['voltages']['cell3_voltage']['text'] = "{:.3f}".format(cell3) + "V"
-                        if args.victron:
-                        	dbusservice["/Voltages/Cell3"] = BMS_STATUS['voltages']['cell3_voltage']['text']
-                        	dbusservice["/Raw/Voltages/Cell3"] = BMS_STATUS['voltages']['cell3_voltage']['value']
-			cell4 = float(ord(packet[10])<<8 | ord(packet[11]))/1000.0
-                        BMS_STATUS['voltages']['cell4_voltage']['value'] = cell4
-                        BMS_STATUS['voltages']['cell4_voltage']['text'] = "{:.3f}".format(cell4) + "V"
-                        if args.victron:
-                        	dbusservice["/Voltages/Cell4"] = BMS_STATUS['voltages']['cell4_voltage']['text']
-                        	dbusservice["/Raw/Voltages/Cell4"] = BMS_STATUS['voltages']['cell4_voltage']['value']
+			BMS_STATUS['voltages']['cell2_voltage']['text'] = "{:.3f}".format(cell2) + "V"
+			if args.victron:
+				dbusservice["/Voltages/Cell2"] = BMS_STATUS['voltages']['cell2_voltage']['text']
+				dbusservice["/Raw/Voltages/Cell2"] = BMS_STATUS['voltages']['cell2_voltage']['value']
+			cell3 = float(packet[8]<<8 | packet[9])/1000.0
+			BMS_STATUS['voltages']['cell3_voltage']['value'] = cell3
+			BMS_STATUS['voltages']['cell3_voltage']['text'] = "{:.3f}".format(cell3) + "V"
+			if args.victron:
+				dbusservice["/Voltages/Cell3"] = BMS_STATUS['voltages']['cell3_voltage']['text']
+				dbusservice["/Raw/Voltages/Cell3"] = BMS_STATUS['voltages']['cell3_voltage']['value']
+			cell4 = float(packet[10]<<8 | packet[11])/1000.0
+			BMS_STATUS['voltages']['cell4_voltage']['value'] = cell4
+			BMS_STATUS['voltages']['cell4_voltage']['text'] = "{:.3f}".format(cell4) + "V"
+			if args.victron:
+				dbusservice["/Voltages/Cell4"] = BMS_STATUS['voltages']['cell4_voltage']['text']
+				dbusservice["/Raw/Voltages/Cell4"] = BMS_STATUS['voltages']['cell4_voltage']['value']
 
-		if(ord(packet[1]) == 3):
+		if(packet[1] == 3):
 			logging.info("parse packet 3")
-			volt = float(ord(packet[4])<<8 | ord(packet[5]))/100
+			volt = float(packet[4]<<8 | packet[5])/100
 			BMS_STATUS['voltages']['agg_voltages']['sum']['value']  = volt
 			BMS_STATUS['voltages']['agg_voltages']['sum']['text']   = "{:.2f}".format(BMS_STATUS['voltages']['agg_voltages']['sum']['value']) + "V"
 			if args.victron:
@@ -387,7 +387,7 @@ def parse_packet(packet):
 				dbusservice["/Raw/Voltages/Sum"]  = BMS_STATUS['voltages']['agg_voltages']['sum']['value']
 				dbusservice["/Dc/0/Voltage"]  = BMS_STATUS['voltages']['agg_voltages']['sum']['value']
 			reset_status_values()
-			soc = float(struct.unpack('B', packet[23])[0])
+			soc = float(packet[23])
 			BMS_STATUS['bms']['soc']['value'] = soc
 			BMS_STATUS['bms']['soc']['text'] = "{:.0f}".format(soc) + "%"
 			if args.victron:
@@ -409,23 +409,23 @@ def parse_packet(packet):
 				dbusservice["/Raw/Info/Temp/Sensor1"] = BMS_STATUS['bms']['temperature']['sensor_t1']['value']
 				dbusservice["/Dc/0/Temperature"] = BMS_STATUS['bms']['temperature']['sensor_t1']['value']
 			temp2 = float((struct.unpack(">h", bytearray(packet[29:31]))[0])- 2731)/10.0
-                        BMS_STATUS['bms']['temperature']['sensor_t2']['value'] = temp2
-                        BMS_STATUS['bms']['temperature']['sensor_t2']['text'] = "{:.2f}".format(temp2) + SPECIAL_DISPLAY_SYMBOLS['degree'] + "C"
-                        if args.victron:
-                        	dbusservice["/Info/Temp/Sensor2"] = BMS_STATUS['bms']['temperature']['sensor_t2']['text']
-                                dbusservice["/Raw/Info/Temp/Sensor2"] = BMS_STATUS['bms']['temperature']['sensor_t2']['value']
-                        remainAmp = float(ord(packet[8])<<8 | ord(packet[9]))/100
+			BMS_STATUS['bms']['temperature']['sensor_t2']['value'] = temp2
+			BMS_STATUS['bms']['temperature']['sensor_t2']['text'] = "{:.2f}".format(temp2) + SPECIAL_DISPLAY_SYMBOLS['degree'] + "C"
+			if args.victron:
+				dbusservice["/Info/Temp/Sensor2"] = BMS_STATUS['bms']['temperature']['sensor_t2']['text']
+				dbusservice["/Raw/Info/Temp/Sensor2"] = BMS_STATUS['bms']['temperature']['sensor_t2']['value']
+			remainAmp = float(packet[8]<<8 | packet[9])/100
 			BMS_STATUS['voltages']['battery_capacity_ah']['value'] = remainAmp
 			BMS_STATUS['voltages']['battery_capacity_ah']['text'] = "{:.0f}".format(remainAmp) + "Ah"
 			if args.victron:
 				dbusservice["/Voltages/BatteryCapacityAH"] = BMS_STATUS['voltages']['battery_capacity_ah']['text']
 				dbusservice["/Raw/Voltages/BatteryCapacityAH"] = BMS_STATUS['voltages']['battery_capacity_ah']['value']
-                        normalAmp = float(struct.unpack(">h", bytearray(packet[10:12]))[0])/100.0
+			normalAmp = float(struct.unpack(">h", bytearray(packet[10:12]))[0])/100.0
 			BMS_STATUS['voltages']['battery_nominal_ah']['value'] = normalAmp
-                        BMS_STATUS['voltages']['battery_nominal_ah']['text'] = "{:.0f}".format(normalAmp) + "Ah"
-                        if args.victron:
-                        	dbusservice["/Voltages/BatteryNominalAH"] = BMS_STATUS['voltages']['battery_nominal_ah']['text']
-                                dbusservice["/Raw/Voltages/BatteryNominalAH"] = BMS_STATUS['voltages']['battery_nominal_ah']['value']
+			BMS_STATUS['voltages']['battery_nominal_ah']['text'] = "{:.0f}".format(normalAmp) + "Ah"
+			if args.victron:
+				dbusservice["/Voltages/BatteryNominalAH"] = BMS_STATUS['voltages']['battery_nominal_ah']['text']
+				dbusservice["/Raw/Voltages/BatteryNominalAH"] = BMS_STATUS['voltages']['battery_nominal_ah']['value']
 			remainWh = remainAmp * volt
 			BMS_STATUS['voltages']['battery_capacity_wh']['value'] = remainWh
 			BMS_STATUS['voltages']['battery_capacity_wh']['text'] = "{:.0f}".format(BMS_STATUS['voltages']['battery_capacity_wh']['value']) + "Wh"
@@ -442,51 +442,51 @@ def parse_packet(packet):
 			watt = BMS_STATUS['bms']['current']['value'] * BMS_STATUS['voltages']['agg_voltages']['sum']['value']
 			if args.victron:
 				dbusservice["/Dc/0/Power"]     = watt
-                        BMS_STATUS['bms']['number_of_cells']['text'] = "4"
-                        if args.victron:
-                                dbusservice["/Info/NumberOfCells"]     = BMS_STATUS['bms']['number_of_cells']['text']
+			BMS_STATUS['bms']['number_of_cells']['text'] = "4"
+			if args.victron:
+				dbusservice["/Info/NumberOfCells"]     = BMS_STATUS['bms']['number_of_cells']['text']
 			cycles =  struct.unpack(">h", bytearray(packet[12:14]))[0]
-                        BMS_STATUS['bms']['cycles']['text'] = 1
-                        if args.victron:
-                                dbusservice["/Info/Cycles"]     = BMS_STATUS['bms']['cycles']['text']
-			protectionByte1 = ord(packet[20])
-                	protectionBits1 = bin(protectionByte1)[2:].rjust(8, '0')
-                	protectionText = "Kein Fehler"
+			BMS_STATUS['bms']['cycles']['text'] = cycles
+			if args.victron:
+				dbusservice["/Info/Cycles"]     = BMS_STATUS['bms']['cycles']['text']
+			protectionByte1 = packet[20]
+			protectionBits1 = bin(protectionByte1)[2:].rjust(8, '0')
+			protectionText = "Kein Fehler"
 			if(protectionBits1[0] == 1):
 				protectionText = "Zellen-Spg zu hoch"
 			if(protectionBits1[1] == 1):
-                                protectionText = "Unterspannung"
+				protectionText = "Unterspannung"
 			if(protectionBits1[2] == 1):
-                                protectionText = "Gruppen-Spg. zu hoch"
+				protectionText = "Gruppen-Spg. zu hoch"
 			if(protectionBits1[3] == 1):
-                                protectionText = "Gruppen-Spg. zu niedrig"
+				protectionText = "Gruppen-Spg. zu niedrig"
 			if(protectionBits1[4] == 1):
-                                protectionText = "Lade-Temp zu hoch"
+				protectionText = "Lade-Temp zu hoch"
 			if(protectionBits1[5] == 1):
-                                protectionText = "Lade-Temp zui niedrig"
+				protectionText = "Lade-Temp zui niedrig"
 			if(protectionBits1[6] == 1):
-                                protectionText = "Entlade-Temp zu hoch"
+				protectionText = "Entlade-Temp zu hoch"
 			if(protectionBits1[7] == 1):
-                                protectionText = "Entlade-Temp zu niedrig"
-			protectionByte2 = ord(packet[21])
-                        protectionBits2 = bin(protectionByte2)[2:].rjust(8, '0')
-                        protectionText = "Kein Fehler"
-                        if(protectionBits2[0] == 1):
-                                protectionText = "Lade-Strom zu hoch"
-                        if(protectionBits2[1] == 1):
-                                protectionText = "Entlade-Strom zu hoch"
-                        if(protectionBits2[2] == 1):
-                                protectionText = "Kurzschluss"
-                        if(protectionBits2[3] == 1):
-                                protectionText = "IC Error"
-                        if(protectionBits2[4] == 1):
-                                protectionText = "Software Lock"
+				protectionText = "Entlade-Temp zu niedrig"
+			protectionByte2 = packet[21]
+			protectionBits2 = bin(protectionByte2)[2:].rjust(8, '0')
+			protectionText = "Kein Fehler"
+			if(protectionBits2[0] == 1):
+				protectionText = "Lade-Strom zu hoch"
+			if(protectionBits2[1] == 1):
+				protectionText = "Entlade-Strom zu hoch"
+			if(protectionBits2[2] == 1):
+				protectionText = "Kurzschluss"
+			if(protectionBits2[3] == 1):
+				protectionText = "IC Error"
+			if(protectionBits2[4] == 1):
+				protectionText = "Software Lock"
 			BMS_STATUS['bms']['protection_state']['text'] = protectionText
-                        if args.victron:
-                        	dbusservice["/Info/ProtectionState"]     = BMS_STATUS['bms']['protection_state']['text']
+			if args.victron:
+				dbusservice["/Info/ProtectionState"]     = BMS_STATUS['bms']['protection_state']['text']
 		        
 			if args.victron:
-                                dbusservice["/Alarms/HighChargeTemperature"]     = protectionBits1[4]
+				dbusservice["/Alarms/HighChargeTemperature"]     = protectionBits1[4]
 				dbusservice["/Alarms/LowChargeTemperature"]     = protectionBits1[5]
 				dbusservice["/Alarms/HighDischargeCurrent"]     = protectionBits2[1]
 				dbusservice["/Alarms/HighChargeCurrent"]     = protectionBits2[0]
@@ -496,71 +496,73 @@ def parse_packet(packet):
 					dbusservice["/Alarms/LowSoc"]     = 1
 				else:
 					dbusservice["/Alarms/LowSoc"]     = 0
-			balanceByte = ord(packet[16])
-                        balanceBits = bin(balanceByte)[2:].rjust(8, '0')
+			balanceByte = packet[16]
+			balanceBits = bin(balanceByte)[2:].rjust(8, '0')
 			BMS_STATUS['bms']['balance_1']['text'] = balanceBits[0]
-                        if args.victron:
-                        	dbusservice["/Info/Balance1"]     = BMS_STATUS['bms']['balance_1']['text']
+			if args.victron:
+				dbusservice["/Info/Balance1"]     = BMS_STATUS['bms']['balance_1']['text']
 			BMS_STATUS['bms']['balance_2']['text'] = balanceBits[1]
-                        if args.victron:
-                                dbusservice["/Info/Balance2"]     = BMS_STATUS['bms']['balance_2']['text']
+			if args.victron:
+				dbusservice["/Info/Balance2"]     = BMS_STATUS['bms']['balance_2']['text']
 			BMS_STATUS['bms']['balance_3']['text'] = balanceBits[2]
-                        if args.victron:
-                                dbusservice["/Info/Balance3"]     = BMS_STATUS['bms']['balance_3']['text']
+			if args.victron:
+				dbusservice["/Info/Balance3"]     = BMS_STATUS['bms']['balance_3']['text']
 			BMS_STATUS['bms']['balance_4']['text'] = balanceBits[3]
-                        if args.victron:
-                                dbusservice["/Info/Balance4"]     = BMS_STATUS['bms']['balance_4']['text']
+			if args.victron:
+				dbusservice["/Info/Balance4"]     = BMS_STATUS['bms']['balance_4']['text']
+
 def handle_serial_data():
-        try:
-            serial_port.flushOutput()
-            serial_port.flushInput()
-            cw = [221,165,3,0,255,253,119]
-	    logging.info("ask for basic Data")
-            serial_port.write(serial.to_bytes(cw))
-            serial_packet = ""
-	    time.sleep(1.0)
-            if (serial_port.in_waiting > 0):
-                logging.debug("Data Waiting [" + str(serial_port.in_waiting) + " bytes]")
-                if (serial_port.in_waiting >= (PACKET_LENGTH_MINIMUM * 2)):
-                    data_buffer_array = serial_port.read(serial_port.in_waiting)
-                    logging.debug("Data Received [" + str(len(data_buffer_array)) + " bytes]")
-                    for data_buffer in data_buffer_array:
-                        serial_packet += data_buffer
+	try:
+		serial_port.flushOutput()
+		serial_port.flushInput()
+		cw = [221,165,3,0,255,253,119]
+		logging.info("ask for basic Data")
+		serial_port.write(serial.to_bytes(cw))
+		serial_packet = bytearray()
+		time.sleep(1.0)
+		if (serial_port.in_waiting > 0):
+				logging.debug("Data Waiting [" + str(serial_port.in_waiting) + " bytes]")
+				if (serial_port.in_waiting >= (PACKET_LENGTH_MINIMUM * 2)):
+						data_buffer_array = serial_port.read(serial_port.in_waiting)
+						logging.debug("Data Received [" + str(len(data_buffer_array)) + " bytes]")
+						for data_buffer in data_buffer_array:
+								serial_packet.append(data_buffer)
 
-                    if (len(serial_packet) > 0):
-			logging.info("receive DATA")
-                        parse_packet(serial_packet)
-                    data_buffer_array = ""
-                    serial_packet = ""
+				if (len(serial_packet) > 0):
+					logging.info("receive DATA")
+					parse_packet(serial_packet)
+					data_buffer_array = bytearray()
+					serial_packet = bytearray()
 
+		serial_port.flushOutput()
+		serial_port.flushInput()
+		cw = [221,165,4,0,255,252,119]
+		logging.info("ask for Cell Data")
+		serial_port.write(serial.to_bytes(cw))
+		serial_packet = bytearray()
+		time.sleep(1.0)
+		if (serial_port.in_waiting > 0):
+				logging.debug("Data Waiting [" + str(serial_port.in_waiting) + " bytes]")
+				if (serial_port.in_waiting >= (PACKET_LENGTH_MINIMUM * 2)):
+						data_buffer_array = serial_port.read(serial_port.in_waiting)
+						logging.debug("Data Received [" + str(len(data_buffer_array)) + " bytes]")
+						for data_buffer in data_buffer_array:
+								serial_packet.append(data_buffer)
 
-	    serial_port.flushOutput()
-            serial_port.flushInput()
-            cw = [221,165,4,0,255,252,119]
-            logging.info("ask for Cell Data")
-            serial_port.write(serial.to_bytes(cw))
-            serial_packet = ""
-            time.sleep(1.0)
-            if (serial_port.in_waiting > 0):
-                logging.debug("Data Waiting [" + str(serial_port.in_waiting) + " bytes]")
-                if (serial_port.in_waiting >= (PACKET_LENGTH_MINIMUM * 2)):
-                    data_buffer_array = serial_port.read(serial_port.in_waiting)
-                    logging.debug("Data Received [" + str(len(data_buffer_array)) + " bytes]")
-                    for data_buffer in data_buffer_array:
-                        serial_packet += data_buffer
+						if (len(serial_packet) > 0):
+								logging.info("receive DATA")
+								parse_packet(serial_packet)
+						data_buffer_array = bytearray()
+						serial_packet = bytearray()
 
-                    if (len(serial_packet) > 0):
-                        logging.info("receive DATA")
-                        parse_packet(serial_packet)
-                    data_buffer_array = ""
-                    serial_packet = ""
+		if args.victron:
+				gobject.timeout_add(5000, handle_serial_data)
 
-            if args.victron:
-                gobject.timeout_add(5000, handle_serial_data)
-
-        except KeyboardInterrupt:
-                if not args.victron:
-                        raise
+	except KeyboardInterrupt:
+		if not args.victron:
+			raise
+	except:
+		raise
 
 if args.victron:
 	gobject.timeout_add(5000, handle_serial_data)
