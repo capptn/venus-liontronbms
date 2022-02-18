@@ -34,6 +34,13 @@ MbPage {
 				MbTextBlock { item { bind: service.path("/Info/Soc"); } width: 70; height: 25 }
 			]
 		}
+		
+		MbItemRow {
+			description: qsTr("")
+			values [
+				MbTextBlock { item { bind: service.path("/Info/Eta"); } width:70; height: 25 }
+			]
+		}
 
 		MbItemRow {
 			description: qsTr("Temperatur-Sensoren (1/2)")
@@ -42,7 +49,6 @@ MbPage {
 				MbTextBlock { item { bind: service.path("/Info/Temp/Sensor2"); } width: 70; height: 25 }
 			]
 		}
-
 
 		MbItemRow {
 			description: qsTr("Letzte Verbindung")
