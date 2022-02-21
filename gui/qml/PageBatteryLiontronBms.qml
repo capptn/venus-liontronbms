@@ -37,7 +37,7 @@ MbPage {
 		
 		MbItemRow {
 			description: qsTr("")
-			values [
+			values: [
 				MbTextBlock { item { bind: service.path("/Info/Eta"); } width:70; height: 25 }
 			]
 		}
