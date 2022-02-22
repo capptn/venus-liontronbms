@@ -271,7 +271,7 @@ def get_voltage_value(val1):
 def get_remainWh(v, ah):
     return int(v * ah)
 
-def get_remainTime(a,ah):
+def get_remainTime(ah,a):
     return float(ah/a)
 
 def parse_packet(packet):
@@ -446,31 +446,33 @@ def parse_packet(packet):
                 dbusservice["/Voltages/BatteryCapacityWH"] = BMS_STATUS["voltages"][
                     "battery_capacity_wh"
                 ]["text"]
-            dbusservice["/Raw/Voltages/BatteryCapacityWH"] = BMS_STATUS["voltages"][
+                dbusservice["/Raw/Voltages/BatteryCapacityWH"] = BMS_STATUS["voltages"][
                     "battery_capacity_wh"
                 ]["value"]
             amp = float(struct.unpack(">h", bytearray(packet[6:8]))[0]) / 100.0
-            if abs(amp)==amp:
-                remainTime = get_remainTime(remainAmp,amp)
-                prefix = "Voll um "
-            else:
-                remainTime = get_remainTime(normalAmp-remainAmp, amp)
-                prefix = "Leer um "
-            BMS_STATUS["bms"]["eta"]["value"] = remainTime
-            remainT = datetime.datetime.now() + datetime.datetime.fromtimestamp(remainTime*3600)
-            BMS_STATUS["bms"]["eta"]["text"] = prefix + remainT.strftime(
-                "%a %d.%m.%Y %H:%M:%S")
-            dbusservice["/Info/Eta"] = BMS_STATUS["bms"]["eta"]["text"]
-            dbusservice["/Raw/Info/Eta"] = BMS_STATUS["bms"]["eta"]["text"]
-            
             BMS_STATUS["bms"]["current"]["value"] = amp
             BMS_STATUS["bms"]["current"]["text"] = (
-                str(BMS_STATUS["bms"]["current"]["value"]) + "A"
-            )
+                str(BMS_STATUS["bms"]["current"]["value"]) + "A")
             if args.victron:
                 dbusservice["/Info/Current"] = BMS_STATUS["bms"]["current"]["text"]
                 dbusservice["/Raw/Info/Current"] = BMS_STATUS["bms"]["current"]["value"]
                 dbusservice["/Dc/0/Current"] = BMS_STATUS["bms"]["current"]["value"]
+
+            if abs(amp)==amp:
+                remainTime = get_remainTime(normalAmp-remainAmp,amp)
+                prefix = " voll um "
+            else:
+                remainTime = get_remainTime(remainAmp, abs(amp))
+                prefix = " leer um "
+            logging.info(prefix + str(remainTime))
+            BMS_STATUS["bms"]["eta"]["value"] = remainTime
+            remainT = current_date + datetime.timedelta(seconds=remainTime*3600)
+            BMS_STATUS["bms"]["eta"]["text"] = prefix + remainT.strftime(
+                "%a %d.%m.%Y %H:%M:%S")
+            if args.victron:
+                dbusservice["/Info/Eta"] = BMS_STATUS["bms"]["eta"]["text"]
+                dbusservice["/Raw/Info/Eta"] = BMS_STATUS["bms"]["eta"]["text"]
+            
             watt = (
                 BMS_STATUS["bms"]["current"]["value"]
                 * BMS_STATUS["voltages"]["agg_voltages"]["sum"]["value"]

@@ -38,7 +38,7 @@ MbPage {
 		MbItemRow {
 			description: qsTr("Voraus.")
 			values: [
-				MbTextBlock { item { bind: service.path("/Info/Eta"); } width:70; height: 25 }
+				MbTextBlock { item { bind: service.path("/Info/Eta"); } width:300; height: 25 }
 			]
 		}
 
