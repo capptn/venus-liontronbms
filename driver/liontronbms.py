@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+from re import X
 from gi.repository import GLib as gobject
 import platform
 import argparse
@@ -482,13 +483,12 @@ def parse_basicdata(packet):
     logging.info(prefix + str(remainTime))
     BMS_STATUS["bms"]["eta"]["value"] = remainTime
     if remainTime == -1:
-        prefix = ""
-        remainT = ""
+        BMS_STATUS["bms"]["eta"]["text"] = "--"
     else:
         remainT = current_date + datetime.timedelta(seconds=remainTime*3600)
-
-    BMS_STATUS["bms"]["eta"]["text"] = prefix + remainT.strftime(
+        BMS_STATUS["bms"]["eta"]["text"] = prefix + remainT.strftime(
         "%a %d.%m.%Y %H:%M:%S")
+
     if args.victron:
         dbusservice["/Info/Eta"] = BMS_STATUS["bms"]["eta"]["text"]
         dbusservice["/Raw/Info/Eta"] = BMS_STATUS["bms"]["eta"]["text"]
@@ -593,9 +593,13 @@ def parse_bmsinfo(packet):
 
 def validate_data(buffer: bytes):
     logging.debug(binascii.hexlify(buffer))
+    if (len(buffer)==0):
+        return False
+
     if (buffer[0] != 0xdd):
         logging.error("no SOR found")
         return False
+
     if (buffer[len(buffer)-1] != 0x77):
         logging.error("no EOR found")
         return False
@@ -607,6 +611,7 @@ def validate_data(buffer: bytes):
 
     if (content_len > len(buffer)-7):
         logging.error("content length larger than buffer size")
+        logging.info(binascii.hexlify(buffer))
         return False
 
     data = buffer[2:-3]
@@ -624,6 +629,7 @@ def validate_data(buffer: bytes):
 
     if checksum_received != crc_b:
         logging.error("Checksum missmatch")
+        logging.info(binascii.hexlify(buffer))
         if args.victron:
             dbusservice["/Info/ProtectionState"] = "BMS Kommunikationsfehler. Fehlerhafte Daten empfangen."
 
@@ -652,6 +658,10 @@ def receive_data(cmd: bytearray):
                 logging.debug("receive DATA")
 
                 return serial_packet
+            else:
+                return bytearray()
+        
+        return bytearray()
     except:
         raise
 
@@ -691,7 +701,7 @@ def handle_serial_data():
 
 
 if args.victron:
-    gobject.timeout_add(5000, handle_serial_data)
+    gobject.timeout_add(1000, handle_serial_data)
     mainloop = gobject.MainLoop()
     mainloop.run()
 else:
