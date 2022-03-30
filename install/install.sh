@@ -18,7 +18,7 @@ then
 	cp -R velib_python-master/* venus-liontronbms-Master/ext/velib_python
 
 	echo "Add Liontron entries to serial-starter"
-	echo 'ACTION=="add", ENV{ID_BUS}="usb", ENV{ID_MODEL}=="CP2102_USB_to_UART_Bridge_Controller",          ENV{VE_SERVICE}="liontronbms"' >> /etc/udev/rules.d/serial-starter.rules
+	echo 'ACTION=="add", ENV{ID_BUS}=="usb", ENV{ID_MODEL}=="CP2102_USB_to_UART_Bridge_Controller",          ENV{VE_SERVICE}="liontronbms"' >> /etc/udev/rules.d/serial-starter.rules
 	sed -i  '/service.*imt.*dbus-imt-si-rs485tc/a service liontronbms     liontronbms' /etc/venus/serial-starter.conf
 
 	echo "Install Liontron driver"
