@@ -44,7 +44,7 @@ MbPage {
 		}
 
 		MbItemRow {
-			description: qsTr("Zellen (4/5")
+			description: qsTr("Zellen (3/4)")
 			values: [
 				MbTextBlock { item { bind: service.path("/Voltages/Cell3"); } width: 70; height: 25 },
 				MbTextBlock { item { bind: service.path("/Voltages/Cell4"); } width: 70; height: 25 }
