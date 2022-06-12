@@ -6,7 +6,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	echo "Download driver and library"
 
-	wget https://github.com/subzero01/venus-liontronbms/archive/Master.zip
+	wget https://github.com/capptn/venus-liontronbms/archive/Master.zip
 	unzip Master.zip
 	rm Master.zip
 
