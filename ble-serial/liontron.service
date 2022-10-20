@@ -1,0 +1,34 @@
+# /etc/systemd/system/liontron.service
+# serial bridge to Liontron BMS
+
+[Unit]
+Description=ble-serial bridge to Liontron BMS
+After=bluetooth.service
+Documentation=https://pypi.org/project/ble-serial/
+
+[Service]
+Type=simple
+# Run as normal user
+User=mah
+Group=mah
+WorkingDirectory=/tmp
+
+EnvironmentFile=-/etc/default/liontron
+
+ExecStart=/home/mah/.local/bin/ble-serial $BLESERIAL_OPTIONS  --dev $MACADDR
+# Use SIGINT to stop
+KillSignal=SIGINT
+#
+# https://superuser.com/questions/1530033/cannot-get-systemd-to-restart-a-service-if-it-crashes
+RestartForceExitStatus=SIGINT
+
+# Auto restart on crash
+Restart=on-failure
+RestartSec=20
+# Tag things in the log
+SyslogIdentifier=liontron-serial
+#StandardOutput=syslog
+
+
+[Install]
+WantedBy=multi-user.target
