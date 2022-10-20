@@ -13,6 +13,7 @@ import datetime
 import serial
 import struct
 import binascii
+import json
 
 # setup timezone
 os.environ["TZ"] = "Europe/Berlin"
@@ -50,6 +51,13 @@ parser.add_argument(
 )
 parser.add_argument(
     "--victron", action="store_true", help="enable Victron DBUS support for VenusOS"
+)
+parser.add_argument(
+    "--json", action="store_true", help="print NDJSON reports to stdout"
+)
+parser.add_argument(
+    "--interval", default=1.0,type=float, help="reporting interval in seconds. "
+    "negative value: report once only"
 )
 requiredArguments = parser.add_argument_group("required arguments")
 requiredArguments.add_argument(
@@ -574,6 +582,7 @@ def parse_basicdata(packet):
         dbusservice["/Info/Balance4"] = BMS_STATUS["bms"]["balance_4"]["text"]
 
 
+
 def parse_bmsinfo(packet):
     if packet[1] != 5:
         return
@@ -703,6 +712,11 @@ if args.victron:
     mainloop = gobject.MainLoop()
     mainloop.run()
 else:
+
     while True:
         handle_serial_data()
-        time.sleep(1)
+        if args.json:
+            print(json.dumps(BMS_STATUS, indent=4))
+        if args.interval < 0:
+            sys.exit(0)
+        time.sleep(args.interval)
