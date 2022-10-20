@@ -1,0 +1,7 @@
+#  /etc/default/liontron
+
+# battery MAC address
+MACADDR=A4:C1:38:9A:A7:24
+
+BLESERIAL_OPTIONS=" --timeout 10 --interface hci1 --port /tmp/liontron"
+
