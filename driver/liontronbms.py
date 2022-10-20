@@ -11,9 +11,7 @@ import os
 import time
 import datetime
 import serial
-import math
 import struct
-import decimal
 import binascii
 
 # setup timezone
